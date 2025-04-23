@@ -1,0 +1,82 @@
+### Registro
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "adminuser",
+  "email": "admin@example.com",
+  "password": "123456",
+  "role": "admin"
+}
+
+###
+
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "email": "user1@example.com",
+  "password": "123456",
+  "role": "user"
+}
+
+### Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "123456"
+}
+
+### Obtener productos
+GET http://localhost:5000/api/products
+
+### Crear producto
+POST http://localhost:5000/api/products
+Authorization: Bearer {token}
+Content-Type: multipart/form-data
+
+// ⚠️ Solo funciona desde Postman o Thunder Client para subir imagen
+
+### Actualizar producto
+PUT http://localhost:5000/api/products/{productId}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "title": "Nuevo título"
+}
+
+### Alquilar producto
+PATCH http://localhost:5000/api/products/rent/{productId}
+Authorization: Bearer {token}
+
+### Eliminar producto
+DELETE http://localhost:5000/api/products/{productId}
+Authorization: Bearer {token}
+
+
+### Obtener todos los usuarios (admin)
+GET http://localhost:5000/api/users
+Authorization: Bearer {token}
+
+### Obtener usuario por ID
+GET http://localhost:5000/api/users/{userId}
+Authorization: Bearer {token}
+
+### Actualizar usuario
+PUT http://localhost:5000/api/users/{userId}
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "username": "NuevoNombre",
+  "email": "nuevo@email.com",
+  "password": "nueva123"
+}
+
+### Eliminar usuario (admin)
+DELETE http://localhost:5000/api/users/{userId}
+Authorization: Bearer {token}
