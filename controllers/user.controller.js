@@ -1,55 +1,70 @@
-import User from '../models/user.model.js';
-import bcrypt from 'bcryptjs';
+import { Usuario } from "../db/models/usuario.model.js";
 
-// ✅ READ - Obtener todos los usuarios (solo admin)
-export const getAllUsers = async (req, res) => {
+
+const responseAPI = {
+    msg: "",
+    data: [],
+    status: "ok", //error
+    cant: null,
+}
+
+export const getUsuario = async (req, res, next) => {
+
+    const { id } = req.params
+
     try {
-        const users = await User.find().select('-password');
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+        const user = await Usuario.findById(id)
 
-// ✅ READ - Obtener usuario por ID
-export const getUserById = async (req, res) => {
+        responseAPI.msg = "Usuario encontrado";
+        responseAPI.data = user;
+        responseAPI.status = "ok";
+
+        res.status(200).json(responseAPI);
+    } catch (err) {
+        console.error(`tuvimos un error en el try del usuario`, err)
+        next(err);
+    }
+}
+
+export const updateUsuario = async (req,res,next) => {
+    const {id} = req.params;
+    const {nombre} = req.body;
+
+
     try {
-        const user = await User.findById(req.params.id).select('-password');
-        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
-        res.json(user);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+        const updateUser = await Usuario.findByIdAndUpdate(id, { nombre }, { new: true })
 
-// ✅ UPDATE - Actualizar usuario (nombre, email, contraseña)
-export const updateUser = async (req, res) => {
+        if (!updateUser) {
+            responseAPI.msg = `No se encontró el usuario con ID ${id}`
+            responseAPI.status = 'error'
+            return res.status(404).json(responseAPI)
+        }
+        responseAPI.msg = `Usuarios actualizado ${updateUser.nombre}`;
+        responseAPI.data = updateUser;
+        responseAPI.status = "ok";
+
+        res.status(200).json(responseAPI);
+    } catch (err) {
+        console.error(`tuvimos un error en el try del usuario ${updateUser}`, err)
+        next(err);
+    }
+}
+
+export const createUsuario = async (req,res,next) => {
+
+
+    const { nombre } = req.body
+
     try {
-        const { username, email, password } = req.body;
-        const user = await User.findById(req.params.id);
+        const newUser = await Usuario.create( {nombre} )
 
-        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
+        responseAPI.msg = `Usuario creado ${nombre}`;
+        responseAPI.data = newUser;
+        responseAPI.status = "ok";
 
-        if (username) user.username = username;
-        if (email) user.email = email;
-        if (password) user.password = await bcrypt.hash(password, 10);
-
-        await user.save();
-        res.json({ message: 'Usuario actualizado correctamente', user });
+        res.status(201).json(responseAPI);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        console.error(`tuvimos un error en el try del usuario`, err)
+        next(err);
     }
-};
-
-// ✅ DELETE - Eliminar usuario
-export const deleteUser = async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-        if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
-
-        await user.deleteOne();
-        res.json({ message: 'Usuario eliminado correctamente' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
+}
