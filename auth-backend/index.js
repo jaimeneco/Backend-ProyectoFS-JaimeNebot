@@ -1,15 +1,19 @@
 import express from 'express';
+import cors from 'cors';
+
 import router from './routes/index.routes.js';
 import { PORT, DOMAIN, FULLDOMAIN } from './config/config.js';
 import {conectarDB} from './db/mongoose.js'
 
 import { notFoundHandler, errorHandler } from './middlewares/errors.js';
-import cors from 'cors';
+
 
 const app = express();
 
 //Permite acceso desxde cualquier servidor
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extender:true}))
 
 //Limpiar terminal en cada reinicio de proyecto
 console.clear();
@@ -22,7 +26,7 @@ conectarDB();
 
 //Rutas del front:
 app.get("/", (req, res, next) => {
-    res.send("Bienvenidos a nuestra API de ToDo List con Express + Sqlite")
+    res.send("Bienvenidos a nuestra API de pruebas de Auth")
 });
 
 // Rutas de nuestro API

@@ -1,0 +1,27 @@
+# Tareas:
+### Crear producto para usuario 3 (ver URL)
+POST http://localhost:3000/api/v1/user/3/tareas
+Content-Type: application/json
+
+{
+    "tarea": "Hacer un front",
+    "isCompletada": false
+}
+
+### Obtener todos los productos
+GET http://localhost:3000/api/v1/user/1/tareas
+
+### Obtener producto
+GET http://localhost:3000/api/v1/user/3/tareas/4
+
+### Editar tarea
+PUT http://localhost:3000/api/v1/user/1/tareas/3
+Content-Type: application/json
+
+{
+    "tarea": "Nueva tarea",
+    "isCompletada": "False",
+}
+
+### Eliminar producto
+DELETE http://localhost:3000/api/v1/user/1/tareas/3
