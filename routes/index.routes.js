@@ -18,6 +18,23 @@ router.get("/protected", (req, res) => {
     res.json({message: "Estás en una ruta protegida, felicidades tu token es válido"})
 });
 
+// Rutas de Compras
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+
+// Rutas de usuario
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+
+//Rutas de productos
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
+router.post("/compras", getAllCompras);
 
 // Rutas posibles de User (para Admins)
 // En archivo: usuario.controller.js
