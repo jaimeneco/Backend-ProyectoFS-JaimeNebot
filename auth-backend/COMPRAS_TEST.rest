@@ -1,0 +1,38 @@
+### Obtener todas las compras
+GET http://localhost:3000/api/compras
+Content-Type: application/json
+
+###
+
+### Crear una nueva compra
+POST http://localhost:3000/api/compras
+Content-Type: application/json
+
+{
+    "title": "Compra de zapatillas",
+    "type": "ropa",
+    "price": "69.99"
+}
+
+###
+
+### Obtener una compra por ID (reemplaza :id por uno real)
+GET http://localhost:3000/api/compras/:id
+Content-Type: application/json
+
+###
+
+### Actualizar una compra por ID (reemplaza :id por uno real)
+PUT http://localhost:3000/api/compras/:id
+Content-Type: application/json
+
+{
+    "title": "Compra de zapatillas actualizada",
+    "price": "59.99"
+}
+
+###
+
+### Eliminar una compra por ID (reemplaza :id por uno real)
+DELETE http://localhost:3000/api/compras/:id
+Content-Type: application/json

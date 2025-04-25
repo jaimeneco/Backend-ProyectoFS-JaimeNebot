@@ -10,16 +10,16 @@ const options = {
 }
 
 const comprasSchema = new mongoose.Schema({
-    email: {
+    title: {
         type: String,
         required: true,
         unique: true
     },
-    password: {
+    type: {
         type: String,
         required: true,
     },
-    name: {
+    price: {
         type: String,
         required: true,
     },
@@ -29,4 +29,4 @@ const comprasSchema = new mongoose.Schema({
     }
 }, options);
 
-export const Compras= mongoose.model('Compras', comprasSchema);
+export const Compras= mongoose.model('Compra', comprasSchema);
