@@ -29,4 +29,4 @@ const comprasSchema = new mongoose.Schema({
     }
 }, options);
 
-export const Compras= mongoose.model('Compra', comprasSchema);
+export const Compra= mongoose.model('Compra', comprasSchema);
