@@ -1,0 +1,31 @@
+# Usuarios: 
+@dominio=http://localhost:3000
+@uid=67d316aa763ffcf07798df19
+
+
+### Crear usuario
+POST {{dominio}}/api/v1/usuarios
+Content-Type: application/json
+
+{
+    "nombre": "María",
+    "email": "maria@cei.es"
+}
+
+### Obtener todas los usuarios
+GET {{dominio}}/api/v1/usuarios
+
+### Obtener usuario
+GET {{dominio}}/api/v1/usuarios/{{uid}}
+
+### Editar usuarios
+PUT {{dominio}}/api/v1/usuarios/{{uid}}
+Content-Type: application/json
+
+{
+    "nombre": "Pedro",
+    "email": "pedro@hola.com"
+}
+
+### Eliminar usuarios
+DELETE {{dominio}}/api/v1/usuarios/{{uid}}

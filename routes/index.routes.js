@@ -1,42 +1,37 @@
-import { Router } from "express" //importar libreria
+import { Router } from "express";
 
-import {getUsuario, updateUsuario, createUsuario} from '../controllers/users.controller.js'
-import { getProducto, createProducto, getProductos } from "../controllers/products.controller.js";
-import { authMiddleWare } from "../middleware/auth.middleware.js";
-import { registerUser, loginUser, getCurrentUser } from "../controllers/auth.controller.js";
+import { createCompra, getCompraByUserId, getAllCompras, updateCompra } from "../controllers/compras.controller.js";
 
-import { updateProductos, updateImage } from "../controllers/products.controller.js";
+import { createProducto, deleteProducto, getProductoByUserId, getAllProductos, updateProducto } from "../controllers/productos.controller.js";
 
-import { uploadImg } from "../middleware/upload.middleware.js";
+import { createUsuario, deleteUsuario, getUsuarioById, getAllUsuarios, updateUsuario } from "../controllers/usuarios.controller.js";
 
-const router = Router()
+const router = Router();
 
-
-// Rutas de Autentificación AUTH
-//auth.controller.js
-router.post("/auth/register", registerUser);
-router.post("/auth/login", loginUser);
-router.get("/auth/me", authMiddleWare, getCurrentUser);
-
-router.get("/protected", authMiddleWare, (req , res )=>{
-    res.json({message:"Estás en una ruta protegida, Felicidades tu token es válido"})
-})
+// Listas para Admin:
+router.get("/usuarios", getAllUsuarios); 
+router.get("/productos", getAllProductos); 
+router.get("/compras", getAllCompras); 
 
 
-// usuarios
-router.get("/usuarios/:id", getUsuario);
-router.post("/usuarios", createUsuario);
-router.put("/usuarios/:id", updateUsuario)
+// Crear items:
+router.post("/usuarios", createUsuario); //Registrarse 
+router.post("/usuarios/:uid/productos", createProducto); //Poner a la venta
+router.post("/usuarios/:uid/compras", createCompra); //Comprar un producto
 
-// productos
+// Obtener información por ID: 
+router.get("/usuarios/:uid", getUsuarioById);
+router.get("/usuarios/:uid/productos-en-venta", getProductoByUserId);
+router.get("/usuarios/:uid/productos-comprados", getCompraByUserId); 
 
-router.get("/productos/:id", getProducto);
-router.post("/productos", createProducto);
-router.get("/productos", getProductos);
+// Actualizar elementos:
+router.put("/usuarios/:uid", updateUsuario); //Update
+router.put("/productos/:pid", updateProducto); //Update
+router.put("/usuarios/:uid/compras/:id", updateCompra); //Update
 
-router.put("/productos/:id", updateProductos);
-// ruta solo para actualizar la img del producto especifico
-router.put("/productos/:id/image", uploadImg.single('imgprod'), updateImage);
 
+// Eliminar elementos:
+router.delete("/usuarios/:uid", deleteUsuario); 
+router.delete("/productos/:pid", deleteProducto); 
 
 export default router;
