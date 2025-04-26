@@ -13,9 +13,9 @@ const router = Router();
 
 
 // Listas para Admin:
-router.get("/usuarios", getAllUsuarios); 
+router.get("/api/v1/usuarios", getAllUsuarios); 
 router.get("/productos", getAllProductos); 
-router.get("/compras", getAllCompras); 
+router.get("/api/v1/compras", getAllCompras); 
 
 // Rutas de Auth:
 // auth.controller.js
@@ -51,9 +51,9 @@ router.delete("/productos/:pid", deleteProducto);
 // Rutas posibles de User (para Admins)
 // En archivo: usuario.controller.js
 
-// router.get("/usuario", getAllUsuarios);
-// router.get("/usuario/:id", getUsuarioById);
-// router.delete("/usuario/:id", deleteUsuario);
+router.get("/usuario", getAllUsuarios);
+router.get("/usuario/:id", getUsuarioById);
+router.delete("/usuario/:id", deleteUsuario);
 
 export default router;
 
