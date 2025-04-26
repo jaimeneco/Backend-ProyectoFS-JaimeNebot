@@ -11,7 +11,8 @@ Content-Type: application/json
 {
     "title": "Skate Pro",
     "type": "Tabla profesional para trucos avanzados",
-    "price": 120
+    "price": 120,
+    "email": "jaime@hotmail.com"
 }
 
 ### Obtener todos los productos (Admin)
@@ -25,7 +26,7 @@ PUT http://localhost:3000/api/v1/productos/662c6a342aa3c2e4e9b7a9f9
 Content-Type: application/json
 
 {
-    "price": 100,
+    "precio": 100,
     "disponible": false
 }
 

@@ -13,7 +13,6 @@ const productSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        unique: true
     },
     type: {
         type: String,
@@ -22,7 +21,11 @@ const productSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true,
-    }
+    },
+    // image: {
+    //     type: String,
+    //     required: true
+    // }
 }, options);
 
 export const Producto= mongoose.model('Producto', productSchema);
