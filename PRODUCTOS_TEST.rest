@@ -1,27 +1,33 @@
-# Tareas:
-### Crear producto para usuario 3 (ver URL)
-POST http://localhost:3000/api/v1/user/3/tareas
+
+# Productos: 
+@dominio=http://localhost:3000
+@uid=67d316aa763ffcf07798df19
+@pid=3
+
+### Crear producto en venta para un usuario
+POST http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/productos
 Content-Type: application/json
 
 {
-    "tarea": "Hacer un front",
-    "isCompletada": false
+    "title": "Skate Pro",
+    "type": "Tabla profesional para trucos avanzados",
+    "price": 120
 }
 
-### Obtener todos los productos
-GET http://localhost:3000/api/v1/user/1/tareas
+### Obtener todos los productos (Admin)
+GET http://localhost:3000/api/v1/productos
 
-### Obtener producto
-GET http://localhost:3000/api/v1/user/3/tareas/4
+### Obtener productos en venta de un usuario
+GET http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/productos-en-venta
 
-### Editar tarea
-PUT http://localhost:3000/api/v1/user/1/tareas/3
+### Actualizar producto
+PUT http://localhost:3000/api/v1/productos/662c6a342aa3c2e4e9b7a9f9
 Content-Type: application/json
 
 {
-    "tarea": "Nueva tarea",
-    "isCompletada": "False",
+    "precio": 100,
+    "disponible": false
 }
 
 ### Eliminar producto
-DELETE http://localhost:3000/api/v1/user/1/tareas/3
+DELETE http://localhost:3000/api/v1/productos/662c6a342aa3c2e4e9b7a9f9

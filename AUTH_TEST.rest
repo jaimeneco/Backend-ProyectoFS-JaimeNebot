@@ -8,9 +8,9 @@ POST {{dominio}}/api/v1/auth/register
 Content-Type: application/json
 
 {
-    "name": "Jaime3000",
-    "email": "jaime3000@cei.es",
-    "password": "cei3000ul"
+    "name": "JaimeNEBOT",
+    "email": "jaimeNEBOT@cei.es",
+    "password": "ceiNEBOT0ul"
 }
 
 ### login de usuario Jaime

@@ -1,38 +1,30 @@
-### Obtener todas las compras
-GET http://localhost:3000/api/compras
-Content-Type: application/json
+# Productos: 
+@dominio=http://localhost:3000
+@uid=67d316aa763ffcf07798df19
+@pid=675849485
+@compraId= 67584948
 
-###
-
-### Crear una nueva compra
-POST http://localhost:3000/api/compras
-Content-Type: application/json
-
-{
-    "title": "Compra de zapatillas",
-    "type": "ropa",
-    "price": "69.99"
-}
-
-###
-
-### Obtener una compra por ID (reemplaza :id por uno real)
-GET http://localhost:3000/api/compras/:id
-Content-Type: application/json
-
-###
-
-### Actualizar una compra por ID (reemplaza :id por uno real)
-PUT http://localhost:3000/api/compras/:id
+### Crear una compra para un usuario
+POST http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/compras
 Content-Type: application/json
 
 {
-    "title": "Compra de zapatillas actualizada",
-    "price": "59.99"
+    "productoId": "662c6a342aa3c2e4e9b7a9f9",
+    "title": "tabla skate",
+    "type": "snow",
+    "price": "12"
 }
 
-###
+### Obtener todas las compras (Admin)
+GET http://localhost:3000/api/v1/compras
 
-### Eliminar una compra por ID (reemplaza :id por uno real)
-DELETE http://localhost:3000/api/compras/:id
+### Obtener compras de un usuario
+GET http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/productos-comprados
+
+### Actualizar una compra
+PUT http://localhost:3000/api/v1/ussuarios/662c65eb2aa3c2e4e9b7a9f3/compras/662c8dd12aa3c2e4e9b7aa21
 Content-Type: application/json
+
+{
+    "cantidad": 2
+}

@@ -7,11 +7,6 @@ export const conectarDB = async ()=> {
     const url = `mongodb+srv://${DB_USER}:${DB_PASS}@${CLUSTER}/${DATABASE}?retryWrites=true&w=majority&appName=CEI-PRACTICAS`
     console.log(url);
 
-    /*Los Query Params:
-        -retryWrites: (true)reintentar almacenar los datos nuevamente en caso de fallo.
-        -w: (majority) asegurarnos que la operación/dato se hizo correctamente en la mayoría de los servers.
-        -appname: (cei-practicas) identifica tu aplicación en los logs y métricas que posee MongoDB.
-    */
     try {
         await mongoose.connect(url);
         console.log("Conectado a MogoDB Atlas");
