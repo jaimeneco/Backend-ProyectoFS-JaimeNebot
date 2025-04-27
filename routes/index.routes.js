@@ -3,7 +3,7 @@ import authRoutes from './auth.routes.js'
 import adminRoutes from './role.routes.js'
 import {asignarRolAdmin, createUsuario, getUsuario, updatePassword, updateUserData, updateUsuario} from "../controllers/usuario.controller.js"
 import { createProducto, getAllProductos, getProductoById, updateProducto, deleteProducto, getUserProducts } from "../controllers/productos.controller.js"
-import { createCompra, getAllCompras, getCompraByUserId, updateCompra, deleteCompra } from "../controllers/compras.controller.js"
+// import { createCompra, getAllCompras, getCompraByUserId, updateCompra, deleteCompra } from "../controllers/compras.controller.js"
 import { authMiddleWare } from "../middlewares/auth.middleware.js"
 
 const router = Router()
@@ -22,13 +22,13 @@ router.put("/usuarios/:id", updateUsuario)
 router.put("/usuarios/:id/datos", updateUserData)
 router.put("/usuarios/:id/password", updatePassword)
 
-// rutas de compras
-// router.get("/compras/user", authMiddleWare, getUserCompras) // obtener las actividades del usuraio
-router.post("/compras",authMiddleWare, createCompra) //crear nueva actividad
-router.get("/compras", getAllCompras) // obtener todas
-router.get("/compras/:id", getCompraByUserId) //obtener una actividad por ID
-router.put("/compras/:id", updateCompra)
-router.delete("/compras/:id", deleteCompra)
+// // rutas de compras (NO IMPLEMENTADO EN LA WEB)
+// // router.get("/compras/user", authMiddleWare, getUserCompras) // obtener las actividades del usuraio
+// router.post("/compras",authMiddleWare, createCompra) //crear nueva actividad
+// router.get("/compras", getAllCompras) // obtener todas
+// router.get("/compras/:id", getCompraByUserId) //obtener una actividad por ID
+// router.put("/compras/:id", updateCompra)
+// router.delete("/compras/:id", deleteCompra)
 
 // rutas de productos
 router.get("/productos/user", authMiddleWare, getUserProducts) // obtener las actividades del usuraio

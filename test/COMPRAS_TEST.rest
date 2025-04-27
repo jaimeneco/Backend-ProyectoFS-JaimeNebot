@@ -1,30 +1,34 @@
-# Productos: 
-@dominio=http://localhost:3000
-@uid=67d316aa763ffcf07798df19
-@pid=675849485
-@compraId= 67584948
+// --------------------------------
+// NO ESTÁ IMPLEMENTADO EN LA WEB
+// --------------------------------
 
-### Crear una compra para un usuario
-POST http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/compras
-Content-Type: application/json
+# # Productos: 
+# @dominio=http://localhost:3000
+# @uid=67d316aa763ffcf07798df19
+# @pid=675849485
+# @compraId= 67584948
 
-{
-    "productoId": "662c6a342aa3c2e4e9b7a9f9",
-    "title": "tabla skate",
-    "type": "snow",
-    "price": "12"
-}
+# ### Crear una compra para un usuario
+# POST http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/compras
+# Content-Type: application/json
 
-### Obtener todas las compras (Admin)
-GET http://localhost:3000/api/v1/compras
+# {
+#     "productoId": "662c6a342aa3c2e4e9b7a9f9",
+#     "title": "tabla skate",
+#     "type": "snow",
+#     "price": "12"
+# }
 
-### Obtener compras de un usuario
-GET http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/productos-comprados
+# ### Obtener todas las compras (Admin)
+# GET http://localhost:3000/api/v1/compras
 
-### Actualizar una compra
-PUT http://localhost:3000/api/v1/ussuarios/662c65eb2aa3c2e4e9b7a9f3/compras/662c8dd12aa3c2e4e9b7aa21
-Content-Type: application/json
+# ### Obtener compras de un usuario
+# GET http://localhost:3000/api/v1/usuarios/662c65eb2aa3c2e4e9b7a9f3/productos-comprados
 
-{
-    "type": "surf"
-}
+# ### Actualizar una compra
+# PUT http://localhost:3000/api/v1/ussuarios/662c65eb2aa3c2e4e9b7a9f3/compras/662c8dd12aa3c2e4e9b7aa21
+# Content-Type: application/json
+
+# {
+#     "type": "surf"
+# }
