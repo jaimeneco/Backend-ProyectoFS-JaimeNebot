@@ -10,113 +10,156 @@ const ResponseAPI = {
 
 export const registerUser = async (req, res, next) => {
     try {
-        //traer datos del body
-        const { email, password, name } = req.body;
+        const { email, password, name, role } = req.body;
 
-        //verificar si el usuario ya existe
-        const existingUser = await Usuario.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({
-                mensaje: "El usuario con ese email ya existe, si eres tú, intenta hacer un login"
-            });
+        // console.log("Datos recibidos:", { email, password, name, role });  // Verifica que role es 'admin'
+
+
+        if (!email || !password || !name) {
+            responseAPI.msg = 'Completa los campos requeridos';
+            responseAPI.status = "error";
+            return res.status(400).json(responseAPI)
         }
 
-        //crear el nuevo usuario 
-        const user = new Usuario({
-            email, password, name
-        });
-        await user.save();
+        if (password.length < 6) {
+            responseAPI.msg = 'Introduce al menos 6 caracteres';
+            responseAPI.status = 'error';
+            return res.status(400).json(responseAPI)
+        }
 
-        // Generar nuevo Token JWT
+        const existingUser = await Usuario.findOne({ email })
+
+        if (existingUser) {
+            responseAPI.msg = "Este usuario ya existe";
+            responseAPI.status = "error";
+            return res.status(400).json(responseAPI)
+        }
+
+        //encriptar la contraseña
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const newUser = new Usuario({
+            email,
+            password: hashedPassword,
+            name,
+            role: role || 'user' // user por defecto u otro rol si lo pasa (admin claro)
+        });
+
+        await newUser.save();
+
+        // Generar nuevo token JWT (datos, clave secreta, configuraciones especiales)
         const token = jwt.sign(
             {
-                userId: user._id,
-                name: user.name
+                userId: newUser._id,
+                name: newUser.name,
+                role: newUser.role
             },
+
             JWT_SECRET,
-            { expiresIn: '2h' });
 
-        // devolver datos del usuario + JWT Token
-        res.status(201).json({
-            mensaje: "Usuario registrado correctamente",
+            { expiresIn: '3h' }
+        );
+
+        responseAPI.msg = "Usuario creado correctamente";
+        responseAPI.status = "ok";
+        responseAPI.data = {
             token,
-            user: { //haciendo esto seleccionamos nosotros la info que queremos enviar al front, en este caso la contraseña no se enviaría.
-                id: user._id,
-                name: user.name,
-                email: user.email
+            user: {
+                id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+                role: newUser.role
             }
-        })
+        }
 
-        res.json({ "mensaje": "registrar!" })
-    } catch (e) {
-        next(e);
+        res.status(201).json(responseAPI)
+
+    } catch (err) {
+        console.error('Error al registar nuevo usuario', err)
+        next(err)
     }
-};
+}
 
 export const loginUser = async (req, res, next) => {
     try {
-        // recibir datos del request
+
         const { email, password } = req.body;
 
-
-        //verificar si existe el usuario
-        const user = await Usuario.findOne({ email });
-
-        //si no existe el usuario, termino la petición 
-        if (!user) {
-            // devolver mensaje de error
-            return res.status(400).json({ mensaje: "Usuario o clave inválidos" });
+        if (!email || !password) {
+            responseAPI.msg = "Rellenar email y contraseña"
+            responseAPI.status = 'Error'
+            return res.status(400).json(responseAPI)
         }
 
-        // Comparo la clave del request con la clave de la DB.
-        if (password != user.password) {
-            //devolver mensaje de error
-            return res.status(401).json({ mensaje: "Usuario o clave inválidos" });
+        const existingUser = await Usuario.findOne({ email });
+
+        if (!existingUser) {
+            responseAPI.msg = "Email o contraseña inválidos";
+            responseAPI.status = "error";
+            return res.status(401).json(responseAPI)
         }
 
-        // Generar nuevo Token JWT
+        // Comparar password encriptada
+        const isPasswrodValid = await bcrypt.compare(password, existingUser.password)
+
+        if (!isPasswrodValid) {
+            responseAPI.msg = "Email o contraseña erróneos";
+            responseAPI.status = "error";
+            return res.status(401).json(responseAPI)
+        }
+
+        // crear token si la contraseña es valida
         const token = jwt.sign(
             {
-                userId: user._id,
-                name: user.name
+                userId: existingUser._id,
+                name: existingUser.name,
+                role: existingUser.role
             },
             JWT_SECRET,
-            { expiresIn: '2h' });
+            { expiresIn: '3h' }
+        );
 
-        // devolver datos del usuario(sin clave ni datos sensibles) + JWT Token
-        res.status(201).json({
-            mensaje: "Accediste correctamente",
+        responseAPI.msg = 'Inicio de sesión correcto';
+        responseAPI.status = "ok";
+        responseAPI.data = {
             token,
             user: {
-                id: user._id,
-                name: user.name,
-                email: user.email
-            }
-        })
+                id: existingUser._id,
+                name: existingUser.name,
+                email: existingUser.email,
+                role: existingUser.role
 
-        res.json({ "mensaje": "login!" })
-    } catch (e) {
-        next(e);
+            }
+        }
+
+        res.status(200).json(responseAPI)
+
+    } catch (err) {
+        console.error('Error en el loginUser', err)
+        next(err)
     }
-};
+}
 
 export const getCurrentUser = async (req, res, next) => {
     try {
-        // obtener el id del token
-        const idUsuario = req.userId;
 
-        const user = await Usuario.findById({ id: idUsuario }).select('-password'); //Así trae todo menos el password.
+        const idUsuario = req.user.userId;
+
+        const user = await Usuario.findById(idUsuario).select('-password'); //coger todo menos la pass
+
         if (!user) {
-            return res.status(404).json({ mensaje: "Usuario no encontrado" })
+            responseAPI.status = "error";
+            responseAPI.msg = "Usuario no encontrado";
+            return res.status(404).json(responseAPI);
         }
-        const responseAPI = {
-            mensaje: "Usuario encontrado",
-            data: user,
-            status: "ok"
-        }
-        res.status(200).json(responseAPI);
 
-    } catch (e) {
-        next(e);
+        responseAPI.status = "ok";
+        responseAPI.msg = "Usuario encontrado";
+        responseAPI.data = user;
+
+        res.status(200).json(responseAPI)
+
+    } catch (err) {
+        console.error("Error en el getCurrentUser", err)
+        next(err)
     }
-};
+}

@@ -10,22 +10,11 @@ const options = {
 }
 
 const userSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    name: { type: String, required: true },
+    role: { type: String, enum: ["user", "admin"], default: 'user' },
+    // createdAt: { type: Date, default: Date.now}
 }, options);
 
-export const Usuario= mongoose.model('Usuario', userSchema);
+export const Usuario = mongoose.model('Usuario', userSchema);

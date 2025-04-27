@@ -10,7 +10,7 @@ export const conectarDB = async ()=> {
     try {
         await mongoose.connect(url);
         console.log("Conectado a MogoDB Atlas");
-        console.log("Base de datos actual: ", mongoose.connection.db.databaseName);
+        // console.log("Base de datos actual: ", mongoose.connection.db.databaseName);
 
         const collection = await mongoose.connection.db.listCollections().toArray();
         console.log("Colecciones disponibles:", collection.map(c => c.name));

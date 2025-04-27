@@ -5,8 +5,7 @@ import router from './routes/index.routes.js';
 import { PORT, DOMAIN, FULLDOMAIN } from './config/config.js';
 import {conectarDB} from './db/mongoose.js'
 
-import { notFoundHandler, errorHandler } from './middlewares/errors.js';
-
+// const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000"
 
 const app = express();
 
@@ -15,28 +14,28 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extender:true}))
 
-//Limpiar terminal en cada reinicio de proyecto
+conectarDB();
+
 console.clear();
+app.get("/", (req, res) => {
+    res.send("Bienvenidos a mi API de ONPIK")
+});
 
 //Middlewares:
 app.use(express.json()); //leer datos que vienen en el body de mi request
 
-// LLamar a función de conexión
-conectarDB();
 
-//Rutas del front:
-app.get("/", (req, res, next) => {
-    res.send("Bienvenidos a nuestra API de pruebas de Auth")
-});
-
-// Rutas de nuestro API
+// Rutas de mi API
 app.use("/api/v1/", router);
 
-// Middleware de errores:
-app.use(notFoundHandler);
-app.use(errorHandler)
 
+// manejador de errores
+app.use((err, req, res, next) => {
+    console.error(err)
+    res.status(500).json({ msg: 'Error  interno del servidor' })
+})
 
-app.listen(PORT, ()=> {
-    console.log(`Servidor funcionando en ${FULLDOMAIN}`);
+// Puerto
+app.listen(PORT, () => {
+    console.log(`Servidor funcionando en ${DOMAIN}:${PORT}`)
 })
