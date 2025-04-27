@@ -1,14 +1,10 @@
-import { Router } from "express" //importar libreria
+import { Router } from "express"
 import authRoutes from './auth.routes.js'
 import adminRoutes from './role.routes.js'
 import {asignarRolAdmin, createUsuario, getUsuario, updatePassword, updateUserData, updateUsuario} from "../controllers/usuario.controller.js"
 import { createProducto, getAllProductos, getProductoById, updateProducto, deleteProducto, getUserProducts } from "../controllers/productos.controller.js"
 import { createCompra, getAllCompras, getCompraByUserId, updateCompra, deleteCompra } from "../controllers/compras.controller.js"
-// getUserCompras
-// import recomendacionRoutes from './recomendaciones.routes.js'
-// import PackRoutes from './pack.routes.js'
 import { authMiddleWare } from "../middlewares/auth.middleware.js"
-// import { isAdmin } from "../middleware/role.middleware.js"
 
 const router = Router()
 

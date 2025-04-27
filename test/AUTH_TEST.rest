@@ -1,0 +1,59 @@
+@token = 
+@id_usuario = 
+@id_compra = 
+@id_producto = 
+
+### LOGIN para conseguir token
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "email": "jaime@example.com",
+    "password": "tu_contraseña"
+}
+### Crear usuario
+POST http://localhost:3000/api/v1/usuarios
+Content-Type: application/json
+
+{
+    "nombre": "Nuevo Usuario",
+    "email": "nuevo@example.com",
+    "username": "nuevousuario",
+    "telefono": "+34 600 000 001",
+    "password": "123456"
+}
+
+### Obtener usuario por ID
+GET http://localhost:3000/api/v1/usuarios/{{id_usuario}}
+
+### Actualizar usuario completo
+PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}
+Content-Type: application/json
+
+{
+    "nombre": "Usuario Actualizado",
+    "email": "actualizado@example.com",
+    "password": "Usuario001"
+}
+
+### Actualizar solo datos de usuario
+PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}/datos
+Content-Type: application/json
+
+{
+    "nombre": "Nombre Cambiado",
+}
+
+### Actualizar contraseña
+PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}/password
+Content-Type: application/json
+
+{
+    "oldPassword": "123456",
+    "newPassword": "nueva1234"
+}
+
+### Asignar rol admin (requiere token)
+PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}/admin
+Authorization: Bearer {{token}}
+

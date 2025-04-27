@@ -2,7 +2,7 @@ import { Usuario } from "../db/models/index.js";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/config.js'
 
-const ResponseAPI = {
+const responseAPI = {
     data: [],
     msg: "",
     status: "ok"

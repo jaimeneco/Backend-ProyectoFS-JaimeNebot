@@ -26,5 +26,5 @@ PUT http://localhost:3000/api/v1/ussuarios/662c65eb2aa3c2e4e9b7a9f3/compras/662c
 Content-Type: application/json
 
 {
-    "cantidad": 2
+    "type": "surf"
 }
