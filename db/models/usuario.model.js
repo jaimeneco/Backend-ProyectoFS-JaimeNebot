@@ -14,7 +14,11 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     name: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: 'user' },
-    // createdAt: { type: Date, default: Date.now}
+
+    productos:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Producto'
+    }]
 }, options);
 
 export const Usuario = mongoose.model('Usuario', userSchema);

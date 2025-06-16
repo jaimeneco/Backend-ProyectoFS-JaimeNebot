@@ -9,7 +9,7 @@ import {conectarDB} from './db/mongoose.js'
 
 const app = express();
 
-//Permite acceso desxde cualquier servidor
+//Permite acceso desde cualquier servidor
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extender:true}))
@@ -18,7 +18,7 @@ conectarDB();
 
 console.clear();
 app.get("/", (req, res) => {
-    res.send("Bienvenidos a mi API de ONPIK")
+    res.send("Bienvenidos a la API de ONPIK")
 });
 
 //Middlewares:

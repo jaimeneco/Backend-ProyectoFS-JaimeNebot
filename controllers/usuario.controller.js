@@ -37,7 +37,7 @@ export const createUsuario = async (req, res, next) => {
 
     try {
 
-        //primero verifico si email ya existe o no
+        //vemos si email ya existe o no
         const existingUser = await Usuario.findOne({ email })
 
         if (existingUser) {
@@ -214,7 +214,7 @@ export const deleteUsuario = async (req, res, next) => {
     }
 }
 
-//funciión para asignar un rol de admin a un usuario
+//asignar un rol de admin a user
 export const asignarRolAdmin = async (req, res) => {
     const { id } = req.params;
 

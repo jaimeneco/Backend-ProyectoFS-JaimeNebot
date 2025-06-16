@@ -1,6 +1,7 @@
 import { Usuario } from "../db/models/index.js";
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/config.js'
+import { JWT_SECRET } from '../config/config.js';
+import bcrypt from 'bcrypt'
 
 const responseAPI = {
     data: [],
@@ -41,12 +42,12 @@ export const registerUser = async (req, res, next) => {
             email,
             password: hashedPassword,
             name,
-            role: role || 'user' // user por defecto u otro rol si lo pasa (admin claro)
+            role: role || 'user'
         });
 
         await newUser.save();
 
-        // Generar nuevo token JWT (datos, clave secreta, configuraciones especiales)
+        
         const token = jwt.sign(
             {
                 userId: newUser._id,
@@ -144,7 +145,7 @@ export const getCurrentUser = async (req, res, next) => {
 
         const idUsuario = req.user.userId;
 
-        const user = await Usuario.findById(idUsuario).select('-password'); //coger todo menos la pass
+        const user = await Usuario.findById(idUsuario).select('-password');
 
         if (!user) {
             responseAPI.status = "error";

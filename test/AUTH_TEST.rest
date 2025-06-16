@@ -1,7 +1,19 @@
 @token = 
-@id_usuario = 
+@id_usuario =684ff4a6ff9ac0e7b35c663a
 @id_compra = 
 @id_producto = 
+
+
+### Crear usuario
+POST http://localhost:3000/api/v1/usuarios
+Content-Type: application/json
+
+{
+    "name": "Jaime",
+    "email": "jaime@example.com",
+    "password": "jaime123"
+}
+
 
 ### LOGIN para conseguir token
 POST http://localhost:3000/api/v1/auth/login
@@ -9,40 +21,24 @@ Content-Type: application/json
 
 {
     "email": "jaime@example.com",
-    "password": "tu_contraseña"
+    "password": "jaime123"
 }
-### Crear usuario
-POST http://localhost:3000/api/v1/usuarios
-Content-Type: application/json
 
-{
-    "nombre": "Nuevo Usuario",
-    "email": "nuevo@example.com",
-    "username": "nuevousuario",
-    "telefono": "+34 600 000 001",
-    "password": "123456"
-}
 
 ### Obtener usuario por ID
 GET http://localhost:3000/api/v1/usuarios/{{id_usuario}}
+
 
 ### Actualizar usuario completo
 PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}
 Content-Type: application/json
 
 {
-    "nombre": "Usuario Actualizado",
-    "email": "actualizado@example.com",
-    "password": "Usuario001"
+    "name": "JaimeActual",
+    "email": "jaime@example.com",
+    "password": "jaime123"
 }
 
-### Actualizar solo datos de usuario
-PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}/datos
-Content-Type: application/json
-
-{
-    "nombre": "Nombre Cambiado",
-}
 
 ### Actualizar contraseña
 PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}/password

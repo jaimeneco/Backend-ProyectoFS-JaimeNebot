@@ -17,7 +17,7 @@ export const authMiddleWare = (req, res, next) => {
             role: decoded.role 
         };  // Mejor guardar todo el usuario, no solo el id
 
-        next(); // <--- ¡Faltaba esto!
+        next();
 
     } catch (e) {
         console.error("error en el token", err)
