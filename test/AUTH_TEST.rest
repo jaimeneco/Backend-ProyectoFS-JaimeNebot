@@ -9,9 +9,9 @@ POST http://localhost:3000/api/v1/usuarios
 Content-Type: application/json
 
 {
-    "name": "Jordi",
-    "email": "jordi@example.com",
-    "password": "jordi123"
+    "name": "María",
+    "email": "maría@example.com",
+    "password": "mariayjaimexziempre100%realnofakegeniaaal"
 }
 
 

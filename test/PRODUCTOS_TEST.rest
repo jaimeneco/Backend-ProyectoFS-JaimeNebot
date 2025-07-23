@@ -8,11 +8,11 @@ POST http://localhost:3000/api/v1/productos
 Content-Type: application/json
 
 {
-    "title": "Botas de snow DC Company",
-    "type": "Mountain",
-    "description": "Para la práctica de deportes de montaña",
-    "img": "https://images.napali.app/global/dcshoes-products/all/default/xlarge/adyo100079_dcshoes,p_blw_frt2.jpg",
-    "price": 33
+    "title": "Invento de Surf Quiksilver Union 6' Salsa",
+    "type": "Sea",
+    "description": "Para la práctica de deportes de agua",
+    "img": "https://missionsurfshop.com/media/catalog/product/cache/b43f938c028a23568e5c708857f5b368/l/e/leash-quiksilver-union-6-salsa.jpg",
+    "price": 10
 }
 
 ### Obtener todos los productos
