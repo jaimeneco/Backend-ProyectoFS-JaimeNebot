@@ -1,18 +1,18 @@
 @token = 
 @id_usuario = 
 @id_compra = 
-@id_producto = 
+@id_producto = 6880ce7541e168d30c708c4c
 
-### Crear producto (requiere token)
+### Crear producto (sin token)
 POST http://localhost:3000/api/v1/productos
-Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "title": "Tabla de Snowboard",
-    "description": "Tabla ideal para nieve profunda",
-    "img": "https://example.com/snowboard.jpg",
-    "price": 299.99
+    "title": "Botas de snow DC Company",
+    "type": "Mountain",
+    "description": "Para la práctica de deportes de montaña",
+    "img": "https://images.napali.app/global/dcshoes-products/all/default/xlarge/adyo100079_dcshoes,p_blw_frt2.jpg",
+    "price": 33
 }
 
 ### Obtener todos los productos
@@ -23,39 +23,17 @@ GET http://localhost:3000/api/v1/productos/{{id_producto}}
 
 ### Actualizar producto
 PUT http://localhost:3000/api/v1/productos/{{id_producto}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
     "title": "Tabla Snow Actualizada",
+    "type": "snowboard",
+    "description": "Mejorada para freestyle",
+    "img": "https://www.everydaycalifornia.com/cdn/shop/articles/unnamed_b75e57b9-4789-4d4f-8fc3-c42122668e57.jpg?v=1686240476&width=1204",
     "price": 279.99
 }
 
 ### Eliminar producto
 DELETE http://localhost:3000/api/v1/productos/{{id_producto}}
-
-### Crear compra (requiere token)
-POST http://localhost:3000/api/v1/compras
 Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "productoId": "{{id_producto}}",
-    "cantidad": 1
-}
-
-### Obtener todas las compras
-GET http://localhost:3000/api/v1/compras
-
-### Obtener compra por ID de usuario
-GET http://localhost:3000/api/v1/compras/{{id_usuario}}
-
-### Actualizar compra
-PUT http://localhost:3000/api/v1/compras/{{id_compra}}
-Content-Type: application/json
-
-{
-    "cantidad": 2
-}
-
-### Eliminar compra
-DELETE http://localhost:3000/api/v1/compras/{{id_compra}}

@@ -8,19 +8,15 @@ const responseAPI = {
     cant: null,
 }
 
+
 export const createProducto = async (req, res, next) => {
-    const { title, type, price, img } = req.body;
+    const { title, type, price, img, description } = req.body;
 
-    const userId = req.user?.userId; //obtengo el user del token, segun lo guardo en auth.middleware.js
-    // console.log('usuario en back:', userId)
-
-    if (!title || !type || !price || !img || !userId) {
+    if (!title || !type || !price || !img) {
         responseAPI.msg = 'Campos incompletos'
         responseAPI.status = 'error'
         return res.status(400).json(responseAPI)
     }
-
-
 
     try {
         const nuevoProducto = await Producto.create({
@@ -28,12 +24,8 @@ export const createProducto = async (req, res, next) => {
             type,
             price,
             img,
-            user: userId
+            description
         })
-        // console.log('Actividad creada:', nuevaActividad); // Verifica la actividad creada
-        const user = await Usuario.findById(userId)
-        user.productos.push(nuevoProducto._id) //agrega el id de la actividad al array de actividades
-        await user.save()
 
         responseAPI.msg = 'Producto creado';
         responseAPI.data = nuevoProducto;
@@ -46,55 +38,46 @@ export const createProducto = async (req, res, next) => {
     }
 };
 
-//obtener todas los productos
+// Obtener todos los productos
 export const getAllProductos = async (req, res, next) => {
     try {
-
         const productos = await Producto.find()
-
         responseAPI.msg = 'Productos obtenidos'
         responseAPI.status = 'ok'
         responseAPI.data = productos
-
         res.status(200).json(responseAPI)
-
     } catch (err) {
         console.error('Error al obtener productos', err);
         next(err);
     }
 }
 
-// obtener una solo producto
+// Obtener un solo producto
 export const getProductoById = async (req, res, next) => {
     const { id } = req.params
-
     try {
-        const productos = await Producto.findById(id)
-
-        if (!productos) {
+        const producto = await Producto.findById(id)
+        if (!producto) {
             responseAPI.msg = 'Producto no encontrado'
             responseAPI.status = 'error'
             return res.status(404).json(responseAPI)
         }
-
-        responseAPI.msg = 'Producto encontada'
-        responseAPI.data = productos
+        responseAPI.msg = 'Producto encontrado'
+        responseAPI.data = producto
         responseAPI.status = 'ok'
-
         res.status(200).json(responseAPI)
-
     } catch (err) {
-        console.error('error al obtener el producto', err);
+        console.error('Error al obtener el producto', err);
         next(err);
     }
 }
 
-//actualizar un producto
+// Actualizar un producto
 export const updateProducto = async (req, res, next) => {
     const { id } = req.params;
-    const { title, type, price, user, img } = req.body;
+    const { title, type, price, img, description } = req.body;
 
-    if (!title || !type|| !price || !img ) {
+    if (!title || !type || !price || !img) {
         responseAPI.msg = 'Rellena todos los campos'
         responseAPI.status = 'error'
         return res.status(400).json(responseAPI)
@@ -103,7 +86,7 @@ export const updateProducto = async (req, res, next) => {
     try {
         const productoActualizado = await Producto.findByIdAndUpdate(
             id,
-            { title, type, price, img },
+            { title, type, price, img, description },
             { new: true }
         );
 
@@ -123,26 +106,21 @@ export const updateProducto = async (req, res, next) => {
         console.error('Error al actualizar producto', err);
         next(err);
     }
-
 }
 
-//eliminar una actividad
+// Eliminar un producto
 export const deleteProducto = async (req, res, next) => {
     const { id } = req.params;
-
     try {
         const productoEliminado = await Producto.findByIdAndDelete(id);
-
         if (!productoEliminado) {
             responseAPI.msg = 'Producto no encontrado';
             responseAPI.status = 'error';
             return res.status(404).json(responseAPI);
         }
-
         responseAPI.msg = 'Producto eliminado';
         responseAPI.data = productoEliminado;
         responseAPI.status = "ok";
-
         res.status(200).json(responseAPI)
     } catch (err) {
         console.error('Error eliminando producto', err);
@@ -150,26 +128,22 @@ export const deleteProducto = async (req, res, next) => {
     }
 }
 
-// obtener actividades del usuer autentificado!! IMPORTANTE
+// Obtener productos del usuario autenticado
 export const getUserProducts = async (req, res, next) => {
     try {
         const userId = req.user?.userId;
-
         if (!userId) {
             responseAPI.msg = 'No autorizado';
             responseAPI.status = 'error';
             return res.status(401).json(responseAPI)
         }
-
         const productos = await Producto.find({ user: userId }).sort({ time: 1 })
-
-        responseAPI.msg = 'Productos alquilados del usuario';
+        responseAPI.msg = 'Productos del usuario';
         responseAPI.status = 'ok';
         responseAPI.data = productos;
-
         res.status(200).json(responseAPI)
     } catch (err) {
-        console.error('Error al obtener productos alquilados del usuario', err)
+        console.error('Error al obtener productos del usuario', err)
         next(err);
     }
 }
