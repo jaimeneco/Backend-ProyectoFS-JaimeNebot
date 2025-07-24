@@ -6,14 +6,13 @@ import bcrypt from 'bcrypt'
 const responseAPI = {
     data: [],
     msg: "",
-    status: "ok"
+    status: "ok",
+    cant: null
 }
 
 export const registerUser = async (req, res, next) => {
     try {
         const { email, password, name, role } = req.body;
-
-        // console.log("Datos recibidos:", { email, password, name, role });  // Verifica que role es 'admin'
 
 
         if (!email || !password || !name) {
@@ -36,7 +35,7 @@ export const registerUser = async (req, res, next) => {
             return res.status(400).json(responseAPI)
         }
 
-        //encriptar la contraseña
+        //Encriptación de la contraseña
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new Usuario({
             email,
@@ -99,7 +98,7 @@ export const loginUser = async (req, res, next) => {
             return res.status(401).json(responseAPI)
         }
 
-        // Comparar password encriptada
+        // Comparar password cuando está encriptada
         const isPasswrodValid = await bcrypt.compare(password, existingUser.password)
 
         if (!isPasswrodValid) {
@@ -108,7 +107,7 @@ export const loginUser = async (req, res, next) => {
             return res.status(401).json(responseAPI)
         }
 
-        // crear token si la contraseña es valida
+        // Crear token si la contraseña es valida
         const token = jwt.sign(
             {
                 userId: existingUser._id,

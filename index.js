@@ -12,7 +12,7 @@ const app = express();
 //Permite acceso desde cualquier servidor
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extender:true}))
+app.use(express.urlencoded({extended: true}))
 
 conectarDB();
 

@@ -62,6 +62,19 @@ export const createUsuario = async (req, res, next) => {
     }
 }
 
+export const getAllUsuarios = async (req, res, next) => {
+    try {
+        const productos = await Usuario.find()
+        responseAPI.msg = 'Usuarios obtenidos'
+        responseAPI.status = 'ok'
+        responseAPI.data = productos
+        res.status(200).json(responseAPI)
+    } catch (err) {
+        console.error('Error al obtener usuarios', err);
+        next(err);
+    }
+}
+
 // actualizar usuario
 export const updateUsuario = async (req, res, next) => {
     const { id } = req.params;

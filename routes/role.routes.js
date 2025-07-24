@@ -4,7 +4,7 @@ import { authMiddleWare } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-//ruta protegida para acceder solo el role 'admin'
+//Es una ruta protegida para acceder solo si se es admin
 
 router.post('/admin-only', authMiddleWare, isAdmin, (req, res)=>{
     res.status(200).json({msg:'Bienvenido, amdin'})

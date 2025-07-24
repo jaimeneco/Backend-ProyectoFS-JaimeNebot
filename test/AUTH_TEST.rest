@@ -10,8 +10,9 @@ Content-Type: application/json
 
 {
     "name": "María",
-    "email": "maría@example.com",
-    "password": "mariayjaimexziempre100%realnofakegeniaaal"
+    "email": "mariamaria@gmail.com",
+    "imagen": "https://i.pinimg.com/564x/01/be/d0/01bed0d659eec5f891448841d85accd4.jpg",
+    "password": "mariamaria12345"
 }
 
 

@@ -10,12 +10,17 @@ const options = {
 }
 
 const userSchema = new mongoose.Schema({
-    email: { type: String, required: true },
-    password: { type: String, required: true },
     name: { type: String, required: true },
-    role: { type: String, enum: ["user", "admin"], default: 'user' },
+    image: { type: String, required: false},
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: 'user'
+    },
 
-    productos:[{
+    productos: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Producto'
     }]
