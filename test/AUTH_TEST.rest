@@ -1,5 +1,5 @@
-@token = 
-@id_usuario =684ff4a6ff9ac0e7b35c663a
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODgyMGY2NmQwOTM3YWU1MTI1MWQ3YWYiLCJuYW1lIjoiSmFpbWUiLCJyb2xlIjoidXNlciIsImlhdCI6MTc1MzYxNDA2NSwiZXhwIjoxNzUzNjI0ODY1fQ.KQWz9qhSO2xSRNYCrPAcu_ejfnHum_E5CgItiIs8f78
+@id_usuario =68820f66d0937ae51251d7af
 @id_compra = 
 @id_producto = 
 
@@ -12,7 +12,8 @@ Content-Type: application/json
     "name": "María",
     "email": "mariamaria@gmail.com",
     "imagen": "https://i.pinimg.com/564x/01/be/d0/01bed0d659eec5f891448841d85accd4.jpg",
-    "password": "mariamaria12345"
+    "password": "mariamaria12345",
+    "role": "admin"
 }
 
 
@@ -21,8 +22,8 @@ POST http://localhost:3000/api/v1/auth/login
 Content-Type: application/json
 
 {
-    "email": "jaime@example.com",
-    "password": "jaime123"
+    "email": "jaimejaime@gmail.com",
+    "password": "jaimejaime12345"
 }
 
 
@@ -35,8 +36,8 @@ PUT http://localhost:3000/api/v1/usuarios/{{id_usuario}}
 Content-Type: application/json
 
 {
-    "name": "JaimeActual",
-    "email": "jaime@example.com",
+    "name": "Jaime",
+    "email": "jaimejaime@gmail.com",
     "password": "jaime123",
     "role": "admin"
 }
