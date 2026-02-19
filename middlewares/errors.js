@@ -11,7 +11,7 @@ export const errorHandler = (err, req, res, next) => {
     res.status(statusCode).json({
         status: statusCode,
         msg: err.message,
-        stack: process.env.NODE_ENV !== 'production' ? '' : err.stack //Aquí se mostrarán los archivos que ocasionaron el error. Para probar como se vería, solo hay que pasar de == a !== y se muestra el resultado contrario. Esto sirve para que el error no le aparezca al usuario pero que sí le aparezca al desarrollador.
+        stack: process.env.NODE_ENV == 'production' ? '' : err.stack //Aquí se mostrarán los archivos que ocasionaron el error. Para probar como se vería, solo hay que pasar de == a !== y se muestra el resultado contrario. Esto sirve para que el error no le aparezca al usuario pero que sí le aparezca al desarrollador.
 
     });
 }

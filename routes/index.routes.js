@@ -32,7 +32,7 @@ router.put("/usuarios/:id/password", updatePassword)
 // router.delete("/compras/:id", deleteCompra)
 
 // rutas de productos
-router.get("/productos/user", getUserProducts) // obtener las actividades del usuraio
+router.get("/productos/user", authMiddleWare, getUserProducts) // obtener las actividades del usuraio
 router.post("/productos", createProducto) //crear nueva actividad
 router.get("/productos", getAllProductos) // obtener todas
 router.get("/productos/:id", getProductoById) //obtener una actividad por ID

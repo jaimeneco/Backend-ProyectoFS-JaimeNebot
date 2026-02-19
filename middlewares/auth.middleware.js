@@ -20,7 +20,7 @@ export const authMiddleWare = (req, res, next) => {
         next();
 
     } catch (e) {
-        console.error("error en el token", err)
+        console.error("error en el token", e)
         res.status(401).json({ mensaje: "Acceso denegado. Token inválido o expirado" });
     }
 };

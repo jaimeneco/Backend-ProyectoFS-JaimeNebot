@@ -3,39 +3,33 @@ import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config/config.js';
 import bcrypt from 'bcrypt'
 
-const responseAPI = {
-    data: [],
-    msg: "",
-    status: "ok",
-    cant: null
-}
+const responseAPI = () => ({ data: [], msg: "", status: "ok", cant: null })
 
 export const registerUser = async (req, res, next) => {
     try {
+        const response = responseAPI();
         const { email, password, name, role } = req.body;
 
-
         if (!email || !password || !name) {
-            responseAPI.msg = 'Completa los campos requeridos';
-            responseAPI.status = "error";
-            return res.status(400).json(responseAPI)
+            response.msg = 'Completa los campos requeridos';
+            response.status = "error";
+            return res.status(400).json(response)
         }
 
         if (password.length < 6) {
-            responseAPI.msg = 'Introduce al menos 6 caracteres';
-            responseAPI.status = 'error';
-            return res.status(400).json(responseAPI)
+            response.msg = 'Introduce al menos 6 caracteres';
+            response.status = 'error';
+            return res.status(400).json(response)
         }
 
         const existingUser = await Usuario.findOne({ email })
 
         if (existingUser) {
-            responseAPI.msg = "Este usuario ya existe";
-            responseAPI.status = "error";
-            return res.status(400).json(responseAPI)
+            response.msg = "Este usuario ya existe";
+            response.status = "error";
+            return res.status(400).json(response)
         }
 
-        //Encriptación de la contraseña
         const hashedPassword = await bcrypt.hash(password, 10)
         const newUser = new Usuario({
             email,
@@ -46,22 +40,15 @@ export const registerUser = async (req, res, next) => {
 
         await newUser.save();
 
-        
         const token = jwt.sign(
-            {
-                userId: newUser._id,
-                name: newUser.name,
-                role: newUser.role
-            },
-
+            { userId: newUser._id, name: newUser.name, role: newUser.role },
             JWT_SECRET,
-
             { expiresIn: '3h' }
         );
 
-        responseAPI.msg = "Usuario creado correctamente";
-        responseAPI.status = "ok";
-        responseAPI.data = {
+        response.msg = "Usuario creado correctamente";
+        response.status = "ok";
+        response.data = {
             token,
             user: {
                 id: newUser._id,
@@ -71,7 +58,7 @@ export const registerUser = async (req, res, next) => {
             }
         }
 
-        res.status(201).json(responseAPI)
+        res.status(201).json(response)
 
     } catch (err) {
         console.error('Error al registar nuevo usuario', err)
@@ -81,57 +68,50 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
     try {
-
+        const response = responseAPI();
         const { email, password } = req.body;
 
         if (!email || !password) {
-            responseAPI.msg = "Rellenar email y contraseña"
-            responseAPI.status = 'Error'
-            return res.status(400).json(responseAPI)
+            response.msg = "Rellenar email y contraseña"
+            response.status = 'error'
+            return res.status(400).json(response)
         }
 
         const existingUser = await Usuario.findOne({ email });
 
         if (!existingUser) {
-            responseAPI.msg = "Email o contraseña inválidos";
-            responseAPI.status = "error";
-            return res.status(401).json(responseAPI)
+            response.msg = "Email o contraseña inválidos";
+            response.status = "error";
+            return res.status(401).json(response)
         }
 
-        // Comparar password cuando está encriptada
-        const isPasswrodValid = await bcrypt.compare(password, existingUser.password)
+        const isPasswordValid = await bcrypt.compare(password, existingUser.password)
 
-        if (!isPasswrodValid) {
-            responseAPI.msg = "Email o contraseña erróneos";
-            responseAPI.status = "error";
-            return res.status(401).json(responseAPI)
+        if (!isPasswordValid) {
+            response.msg = "Email o contraseña erróneos";
+            response.status = "error";
+            return res.status(401).json(response)
         }
 
-        // Crear token si la contraseña es valida
         const token = jwt.sign(
-            {
-                userId: existingUser._id,
-                name: existingUser.name,
-                role: existingUser.role
-            },
+            { userId: existingUser._id, name: existingUser.name, role: existingUser.role },
             JWT_SECRET,
             { expiresIn: '3h' }
         );
 
-        responseAPI.msg = 'Inicio de sesión correcto';
-        responseAPI.status = "ok";
-        responseAPI.data = {
+        response.msg = 'Inicio de sesión correcto';
+        response.status = "ok";
+        response.data = {
             token,
             user: {
                 id: existingUser._id,
                 name: existingUser.name,
                 email: existingUser.email,
                 role: existingUser.role
-
             }
         }
 
-        res.status(200).json(responseAPI)
+        res.status(200).json(response)
 
     } catch (err) {
         console.error('Error en el loginUser', err)
@@ -141,22 +121,22 @@ export const loginUser = async (req, res, next) => {
 
 export const getCurrentUser = async (req, res, next) => {
     try {
-
+        const response = responseAPI();
         const idUsuario = req.user.userId;
 
         const user = await Usuario.findById(idUsuario).select('-password');
 
         if (!user) {
-            responseAPI.status = "error";
-            responseAPI.msg = "Usuario no encontrado";
-            return res.status(404).json(responseAPI);
+            response.status = "error";
+            response.msg = "Usuario no encontrado";
+            return res.status(404).json(response);
         }
 
-        responseAPI.status = "ok";
-        responseAPI.msg = "Usuario encontrado";
-        responseAPI.data = user;
+        response.status = "ok";
+        response.msg = "Usuario encontrado";
+        response.data = user;
 
-        res.status(200).json(responseAPI)
+        res.status(200).json(response)
 
     } catch (err) {
         console.error("Error en el getCurrentUser", err)

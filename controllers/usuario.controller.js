@@ -1,61 +1,50 @@
 import { Usuario } from "../db/models/index.js";
-import bcrypt, { hash } from 'bcrypt'
+import bcrypt from 'bcrypt'
 
-const responseAPI = {
-    data: [],
-    msg: "",
-    status: "ok",
-    cant: null,
-}
+const responseAPI = () => ({ data: [], msg: "", status: "ok", cant: null })
 
-// obtener usuario por id
 export const getUsuario = async (req, res, next) => {
     const { id } = req.params;
-
     try {
+        const response = responseAPI();
         const user = await Usuario.findById(id);
 
         if (!user) {
-            responseAPI.msg = "Usuario no encontrado";
-            responseAPI.status = "error";
-            return res.status(404).json(responseAPI);
+            response.msg = "Usuario no encontrado";
+            response.status = "error";
+            return res.status(404).json(response);
         }
 
-        responseAPI.msg = "Usuario encontrado";
-        responseAPI.data = user;
-        responseAPI.status = 'ok';
+        response.msg = "Usuario encontrado";
+        response.data = user;
+        response.status = 'ok';
 
-        res.status(200).json(responseAPI);
+        res.status(200).json(response);
     } catch (err) {
         console.error('Error al obtener usuario', err)
+        next(err)
     }
 }
 
-// crear nuevo usuario
 export const createUsuario = async (req, res, next) => {
     const { name, email, password } = req.body
-
     try {
-
-        //vemos si email ya existe o no
+        const response = responseAPI();
         const existingUser = await Usuario.findOne({ email })
 
         if (existingUser) {
-            responseAPI.msg = "El correo electrónico ya está registrado"
-            responseAPI.status = "error"
-
-            return res.status(400).json(responseAPI)
+            response.msg = "El correo electrónico ya está registrado"
+            response.status = "error"
+            return res.status(400).json(response)
         }
-
 
         const newUser = await Usuario.create({ name, email, password })
 
-        responseAPI.msg = 'Usuario creado correctamente'
-        responseAPI.data = newUser;
-        responseAPI.status = 'ok'
+        response.msg = 'Usuario creado correctamente'
+        response.data = newUser;
+        response.status = 'ok'
 
-        res.status(201).json(responseAPI)
-
+        res.status(201).json(response)
     } catch (err) {
         console.error('Error al crear usuario', err)
         next(err)
@@ -64,29 +53,28 @@ export const createUsuario = async (req, res, next) => {
 
 export const getAllUsuarios = async (req, res, next) => {
     try {
-        const productos = await Usuario.find()
-        responseAPI.msg = 'Usuarios obtenidos'
-        responseAPI.status = 'ok'
-        responseAPI.data = productos
-        res.status(200).json(responseAPI)
+        const response = responseAPI();
+        const usuarios = await Usuario.find()
+
+        response.msg = 'Usuarios obtenidos'
+        response.status = 'ok'
+        response.data = usuarios
+
+        res.status(200).json(response)
     } catch (err) {
         console.error('Error al obtener usuarios', err);
         next(err);
     }
 }
 
-// actualizar usuario
 export const updateUsuario = async (req, res, next) => {
     const { id } = req.params;
     const { name, email, password } = req.body;
-
     try {
-
-
+        const response = responseAPI();
         const updateData = { name, email }
 
         if (password) {
-            // console.log("Recibida nueva contraseña")
             const hashedPassword = await bcrypt.hash(password, 10)
             updateData.password = hashedPassword;
         }
@@ -94,164 +82,153 @@ export const updateUsuario = async (req, res, next) => {
         if (email) {
             const existingUser = await Usuario.findOne({ email });
             if (existingUser && existingUser._id.toString() !== id) {
-                return res.status(400).json({ status: 'error', msg: 'el correo ya esta en uso ' })
+                response.status = 'error';
+                response.msg = 'El correo ya está en uso';
+                return res.status(400).json(response)
             }
         }
 
+        const updatedUser = await Usuario.findByIdAndUpdate(id, updateData, { new: true });
 
-        const updateUser = await Usuario.findByIdAndUpdate(
-            id,
-            updateData
-            ,
-            { new: true }
-        );
-
-        if (!updateUser) {
-            responseAPI.msg = 'No se encontró el usuario'
-            responseAPI.status = 'error'
-            return res.status(404).json(responseAPI)
+        if (!updatedUser) {
+            response.msg = 'No se encontró el usuario'
+            response.status = 'error'
+            return res.status(404).json(response)
         }
 
-        responseAPI.msg = 'usuario actualizado';
-        responseAPI.data = {
-            id: updateUser._id,
-            name: updateUser.name,
-            email: updateUser.email
+        response.msg = 'Usuario actualizado';
+        response.data = {
+            id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email
         };
-        responseAPI.status = 'ok'
+        response.status = 'ok'
 
-        res.status(200).json(responseAPI)
-
+        res.status(200).json(response)
     } catch (err) {
-        console.error('erro en updateUsuario', err)
+        console.error('Error en updateUsuario', err)
         next(err)
     }
 }
+
 export const updateUserData = async (req, res, next) => {
     const { id } = req.params;
     const { name, email } = req.body
-
-
     try {
+        const response = responseAPI();
         const updateData = { name, email };
 
         if (email) {
             const existingUser = await Usuario.findOne({ email });
             if (existingUser && existingUser._id.toString() !== id) {
-                responseAPI.status = 'error';
-                responseAPI.msg = 'El correo ya está en uso';
-                return res.status(400).json(responseAPI);
+                response.status = 'error';
+                response.msg = 'El correo ya está en uso';
+                return res.status(400).json(response);
             }
         }
 
-        const updateUser = await Usuario.findByIdAndUpdate(id, updateData, { new: true });
+        const updatedUser = await Usuario.findByIdAndUpdate(id, updateData, { new: true });
 
-        if (!updateUser) {
-            responseAPI.status = 'error';
-            responseAPI.msg = 'usuario no encontrado';
-            return res.status(404).json(responseAPI)
-        }
-        responseAPI.status = "ok";
-        responseAPI.msg = "Usuario actualizado";
-        responseAPI.data = {
-            id: updateUser._id,
-            name: updateUser.name,
-            email: updateUser.email
+        if (!updatedUser) {
+            response.status = 'error';
+            response.msg = 'Usuario no encontrado';
+            return res.status(404).json(response)
         }
 
-        res.status(200).json(responseAPI)
+        response.status = "ok";
+        response.msg = "Usuario actualizado";
+        response.data = {
+            id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email
+        }
+
+        res.status(200).json(response)
     } catch (err) {
         console.error(err)
         next(err)
     }
 }
 
-//actualizar solo contraseña
 export const updatePassword = async (req, res, next) => {
     const { id } = req.params;
     const { lastPassword, newPassword } = req.body;
-
     try {
+        const response = responseAPI();
         const user = await Usuario.findById(id);
+
         if (!user) {
-            responseAPI.status = 'error';
-            responseAPI.msg = 'Usuario no encontrado';
-            return res.status(404).json(responseAPI);
+            response.status = 'error';
+            response.msg = 'Usuario no encontrado';
+            return res.status(404).json(response);
         }
 
-        // comparar la actual con la gaurdada
         const passwordMatch = await bcrypt.compare(lastPassword, user.password);
         if (!passwordMatch) {
-            responseAPI.status = 'error';
-            responseAPI.msg = 'contraseña actual no es correcta'
-            return res.status(400).json(responseAPI)
+            response.status = 'error';
+            response.msg = 'La contraseña actual no es correcta'
+            return res.status(400).json(response)
         }
 
-        //encriptar nueva contraseña
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
-
         await user.save();
 
-        responseAPI.status = 'ok';
-        responseAPI.msg = 'contraseña actualizada correctamente'
+        response.status = 'ok';
+        response.msg = 'Contraseña actualizada correctamente'
 
-        res.status(200).json(responseAPI)
-    } catch (e) {
-        console.error('Error al actualizar la contraseña', e);
-        next(e);
+        res.status(200).json(response)
+    } catch (err) {
+        console.error('Error al actualizar la contraseña', err);
+        next(err);
     }
 }
 
-// eliminar usuario
 export const deleteUsuario = async (req, res, next) => {
     const { id } = req.params;
-
     try {
-        const deleteUser = await Usuario.findByIdAndDelete(id);
+        const response = responseAPI();
+        const deletedUser = await Usuario.findByIdAndDelete(id);
 
-        if (!deleteUser) {
-            responseAPI.msg = `No se ha encontrado usuario con id ${id}`
-            responseAPI.status = 'error'
-            return res.status(404).json(responseAPI)
+        if (!deletedUser) {
+            response.msg = `No se ha encontrado usuario con id ${id}`
+            response.status = 'error'
+            return res.status(404).json(response)
         }
 
-        responseAPI.msg = `usuario con id ${id} eliminado`
-        responseAPI.data = deleteUser;
-        responseAPI.status = 'ok'
+        response.msg = `Usuario con id ${id} eliminado`
+        response.data = deletedUser;
+        response.status = 'ok'
 
-        res.status(200).json(responseAPI)
+        res.status(200).json(response)
     } catch (err) {
-        console.error('error en deleteusuario', err)
+        console.error('Error en deleteUsuario', err)
         next(err)
     }
 }
 
-//asignar un rol de admin a user
-export const asignarRolAdmin = async (req, res) => {
+export const asignarRolAdmin = async (req, res, next) => {
     const { id } = req.params;
-
     try {
+        const response = responseAPI();
         const usuario = await Usuario.findById(id)
 
         if (!usuario) {
-            responseAPI.msg = `no se ha encontrado usuario con id ${id}`;
-            responseAPI.status = 'error';
-            return res.status(404).json(responseAPI)
+            response.msg = `No se ha encontrado usuario con id ${id}`;
+            response.status = 'error';
+            return res.status(404).json(response)
         }
 
         usuario.role = 'admin';
         await usuario.save();
 
-        responseAPI.msg = `rol de admin asignado al id ${id}`;
-        responseAPI.status = 'ok';
-        responseAPI.data = usuario;
+        response.msg = `Rol de admin asignado al usuario con id ${id}`;
+        response.status = 'ok';
+        response.data = usuario;
 
-        return res.status(200).json(responseAPI)
-
-
+        res.status(200).json(response)
     } catch (err) {
         console.error(err);
-        res.status(500).json({ msg: 'error al asignar rol d admin' })
+        next(err)
     }
 }
