@@ -1,5 +1,4 @@
 import { Producto } from "../db/models/producto.model.js"
-import { Usuario } from "../db/models/usuario.model.js";
 
 const responseAPI = () => ({ msg: "", data: [], status: "ok", cant: null })
 

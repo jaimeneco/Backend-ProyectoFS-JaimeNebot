@@ -7,7 +7,7 @@ export const getUsuario = async (req, res, next) => {
     const { id } = req.params;
     try {
         const response = responseAPI();
-        const user = await Usuario.findById(id);
+        const user = await Usuario.findById(id).select('-password');
 
         if (!user) {
             response.msg = "Usuario no encontrado";
@@ -38,10 +38,16 @@ export const createUsuario = async (req, res, next) => {
             return res.status(400).json(response)
         }
 
-        const newUser = await Usuario.create({ name, email, password })
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const newUser = await Usuario.create({ name, email, password: hashedPassword })
 
         response.msg = 'Usuario creado correctamente'
-        response.data = newUser;
+        response.data = {
+            id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role
+        };
         response.status = 'ok'
 
         res.status(201).json(response)
@@ -54,7 +60,7 @@ export const createUsuario = async (req, res, next) => {
 export const getAllUsuarios = async (req, res, next) => {
     try {
         const response = responseAPI();
-        const usuarios = await Usuario.find()
+        const usuarios = await Usuario.find().select('-password')
 
         response.msg = 'Usuarios obtenidos'
         response.status = 'ok'
@@ -72,6 +78,13 @@ export const updateUsuario = async (req, res, next) => {
     const { name, email, password } = req.body;
     try {
         const response = responseAPI();
+
+        if (req.user.userId !== id && req.user.role !== 'admin') {
+            response.status = 'error';
+            response.msg = 'No tienes permiso para modificar este usuario';
+            return res.status(403).json(response);
+        }
+
         const updateData = { name, email }
 
         if (password) {
@@ -116,6 +129,13 @@ export const updateUserData = async (req, res, next) => {
     const { name, email } = req.body
     try {
         const response = responseAPI();
+
+        if (req.user.userId !== id && req.user.role !== 'admin') {
+            response.status = 'error';
+            response.msg = 'No tienes permiso para modificar este usuario';
+            return res.status(403).json(response);
+        }
+
         const updateData = { name, email };
 
         if (email) {
@@ -155,6 +175,13 @@ export const updatePassword = async (req, res, next) => {
     const { lastPassword, newPassword } = req.body;
     try {
         const response = responseAPI();
+
+        if (req.user.userId !== id && req.user.role !== 'admin') {
+            response.status = 'error';
+            response.msg = 'No tienes permiso para modificar este usuario';
+            return res.status(403).json(response);
+        }
+
         const user = await Usuario.findById(id);
 
         if (!user) {
@@ -224,7 +251,12 @@ export const asignarRolAdmin = async (req, res, next) => {
 
         response.msg = `Rol de admin asignado al usuario con id ${id}`;
         response.status = 'ok';
-        response.data = usuario;
+        response.data = {
+            id: usuario._id,
+            name: usuario.name,
+            email: usuario.email,
+            role: usuario.role
+        };
 
         res.status(200).json(response)
     } catch (err) {

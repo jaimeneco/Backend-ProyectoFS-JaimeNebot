@@ -5,6 +5,7 @@ import {asignarRolAdmin, createUsuario, getUsuario, getAllUsuarios, updatePasswo
 import { createProducto, getAllProductos, getProductoById, updateProducto, deleteProducto, getUserProducts } from "../controllers/productos.controller.js"
 // import { createCompra, getAllCompras, getCompraByUserId, updateCompra, deleteCompra } from "../controllers/compras.controller.js"
 import { authMiddleWare } from "../middlewares/auth.middleware.js"
+import { isAdmin } from "../middlewares/role.middleware.js"
 
 const router = Router()
 
@@ -16,12 +17,12 @@ router.use('/auth', authRoutes) // rutas de autentificacion... (/api/v1/auth)
 router.use('/admin',adminRoutes)
 
 //usuarios
-router.get("/usuarios/:id", getUsuario)
+router.get("/usuarios/:id", authMiddleWare, getUsuario)
 router.post("/usuarios", createUsuario)
-router.get("/usuarios", getAllUsuarios)
-router.put("/usuarios/:id", updateUsuario)
-router.put("/usuarios/:id/datos", updateUserData)
-router.put("/usuarios/:id/password", updatePassword)
+router.get("/usuarios", authMiddleWare, isAdmin, getAllUsuarios) //solo Admin
+router.put("/usuarios/:id", authMiddleWare, updateUsuario)
+router.put("/usuarios/:id/datos", authMiddleWare, updateUserData)
+router.put("/usuarios/:id/password", authMiddleWare, updatePassword)
 
 // // rutas de compras (NO IMPLEMENTADO EN LA WEB)
 // // router.get("/compras/user", authMiddleWare, getUserCompras) // obtener las actividades del usuraio
@@ -33,11 +34,11 @@ router.put("/usuarios/:id/password", updatePassword)
 
 // rutas de productos
 router.get("/productos/user", authMiddleWare, getUserProducts) // obtener las actividades del usuraio
-router.post("/productos", createProducto) //crear nueva actividad
+router.post("/productos", authMiddleWare, createProducto) //crear nueva actividad
 router.get("/productos", getAllProductos) // obtener todas
 router.get("/productos/:id", getProductoById) //obtener una actividad por ID
-router.put("/productos/:id", updateProducto)
-router.delete("/productos/:id", deleteProducto)
+router.put("/productos/:id", authMiddleWare, updateProducto)
+router.delete("/productos/:id", authMiddleWare, deleteProducto)
 
 
 //rutas protegias con auth y accesible paara admin
