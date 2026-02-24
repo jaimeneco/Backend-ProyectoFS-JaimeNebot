@@ -16,5 +16,3 @@ export const JWT_SECRET = process.env.JWT_SECRET || "clave-super-secreta"
 
 // export const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000"
 export const FULLDOMAIN = `${DOMAIN}:${PORT}`;
-
-// mongodb+srv://jaimeneb:4OhwbVwS27ONY7J4@cei-practicas.i5jd4.mongodb.net/
